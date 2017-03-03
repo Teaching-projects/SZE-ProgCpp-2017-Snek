@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 {
 	Window ablak("SNAKE AI", 720,1028);
 	Snake kigyo(500,350,ablak.getRenderer());
+	std::cout<<"test";
 	SDL_TimerID idozito=SDL_AddTimer((33/10)*10,idozit,NULL);
 	while(!ablak.isClosed()){
 		kigyo.kiir();
