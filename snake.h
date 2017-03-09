@@ -46,6 +46,7 @@ public:
 	void esemenyVar(SDL_Event &esemeny);
 	void addResz(int x, int y, double szog);
 	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
+	bool utkozes(fal _fal);
 private:
 	SDL_Renderer *_renderer;
 	SDL_Texture* kep;

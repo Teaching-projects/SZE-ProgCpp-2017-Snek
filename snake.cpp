@@ -28,6 +28,8 @@ void Snake::kiir(){
 	for (int i = 0; i < falak.size(); i++)
 	{
 		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
+		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+		SDL_RenderDrawRect(_renderer,&falak[i].rect);
 	}
 }
 
@@ -82,6 +84,10 @@ void Snake::esemenyVar(SDL_Event &esemeny){
   			for(i=1;i<reszek.size();i++){
 				reszek[i].updateHely(reszek[i-1]);
 			}
+			for (int i = 0; i < falak.size(); i++)
+			{
+				utkozes(falak[i]);
+			}
 			break;
 		}
 }
@@ -102,6 +108,20 @@ void Snake::addFal(int x, int y, int h, int w, SDL_Texture* kep){
 	tfal.kep=kep;
 	kep=IMG_LoadTexture(_renderer,"fal.bmp");
 	falak.push_back(tfal);
+}
+
+bool Snake::utkozes(fal _fal){
+	SDL_Rect rect1,rect2;
+	rect1=reszek[0].getDstrect();
+	rect2=_fal.rect;
+if (rect1.x < rect2.x + rect2.w &&
+   rect1.x + rect1.w > rect2.x &&
+   rect1.y < rect2.y + rect2.h &&
+   rect1.h + rect1.y > rect2.y) {
+		std::cout<<"Ütközés\n";
+		return 1;
+	}
+	return 0;
 }
 
 KigyoResz::KigyoResz(int x, int y, double szog)
@@ -133,6 +153,8 @@ void KigyoResz::updateHely(KigyoResz elozo){
 
 void KigyoResz::kiir(SDL_Renderer *renderer, SDL_Texture* kep ){
  	SDL_RenderCopyEx(renderer,kep,&srcrect,&dstrect,_szog,nullptr,SDL_FLIP_NONE);
+	SDL_SetRenderDrawColor(renderer, 200,10,10,240);
+	SDL_RenderDrawRect(renderer,&dstrect);
 }
 std::vector<helyek>& KigyoResz::getHelyek(){
 	return _hely;
