@@ -19,6 +19,7 @@ struct fal{
 struct eger{
 	SDL_Rect rect;
 	SDL_Texture* kep;
+	bool keelUjHely;
 };
 
 class KigyoResz
