@@ -11,13 +11,15 @@ Snake::Snake(int x, int y, SDL_Renderer *renderer):
 		reszek.push_back(k1);
 		tx=reszek[0].getDstrect().x+reszek[0].getDstrect().w;
 		ty=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
-		SDL_Texture* kep1,*kep2;
+		SDL_Texture* kep1,*kep2, *egerKep;
 		kep1=IMG_LoadTexture(_renderer,"fal.bmp");
 		kep2=IMG_LoadTexture(_renderer,"fal2.bmp");
+		egerKep=IMG_LoadTexture(_renderer,"eger.bmp");
 		addFal(0,0,10,1028,kep1);
 		addFal(0,710,10,1028,kep1);
 		addFal(0,0,720,10,kep2);
 		addFal(1018,0,720,10,kep2);
+		addEger(300,300,40,40,egerKep);
 }
 
 void Snake::kiir(){
@@ -31,6 +33,9 @@ void Snake::kiir(){
 		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
 		SDL_RenderDrawRect(_renderer,&falak[i].rect);
 	}
+	SDL_RenderCopyEx(_renderer,_eger.kep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
+	SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+	SDL_RenderDrawRect(_renderer,&_eger.rect);
 }
 
 Snake::~Snake(){
@@ -39,6 +44,7 @@ Snake::~Snake(){
 	{
 		SDL_DestroyTexture(falak[i].kep);
 	}
+	SDL_DestroyTexture(_eger.kep);
 	SDL_DestroyRenderer(_renderer);
 }
 
@@ -106,19 +112,34 @@ void Snake::addFal(int x, int y, int h, int w, SDL_Texture* kep){
 	fal tfal;
 	tfal.rect=tRect;
 	tfal.kep=kep;
-	kep=IMG_LoadTexture(_renderer,"fal.bmp");
 	falak.push_back(tfal);
 }
 
+void Snake::addEger(int x, int y, int h, int w, SDL_Texture* kep){
+	SDL_Rect tRect;
+	tRect.x=x;
+	tRect.y=y;
+	tRect.h=h;
+	tRect.w=w;
+	fal tfal;
+	tfal.rect=tRect;
+	_eger.kep=kep;
+	_eger.rect=tRect;
+}
+
 bool Snake::utkozes(fal _fal){
-	SDL_Rect rect1,rect2;
-	rect1=reszek[0].getDstrect();
-	rect2=_fal.rect;
-if (rect1.x < rect2.x + rect2.w &&
-   rect1.x + rect1.w > rect2.x &&
-   rect1.y < rect2.y + rect2.h &&
-   rect1.h + rect1.y > rect2.y) {
-		std::cout<<"Ütközés\n";
+if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
+   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _fal.rect.x &&
+   reszek[0].getDstrect().y < _fal.rect.y + _fal.rect.h &&
+   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _fal.rect.y) {
+		std::cout<<"Ütközés fallal\n";
+		return 1;
+	}
+if (reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
+   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _eger.rect.x &&
+   reszek[0].getDstrect().y < _eger.rect.y + _eger.rect.h &&
+   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _eger.rect.y) {
+		std::cout<<"Ütközés egerrel\n";
 		return 1;
 	}
 	return 0;

@@ -14,6 +14,10 @@ struct fal{
 	SDL_Rect rect;
 	SDL_Texture* kep;
 };
+struct eger{
+	SDL_Rect rect;
+	SDL_Texture* kep;
+};
 
 class KigyoResz
 {
@@ -46,6 +50,7 @@ public:
 	void esemenyVar(SDL_Event &esemeny);
 	void addResz(int x, int y, double szog);
 	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
+	void addEger(int x, int y, int h, int w, SDL_Texture* kep);
 	bool utkozes(fal _fal);
 private:
 	SDL_Renderer *_renderer;
@@ -53,7 +58,7 @@ private:
 	double tx, ty;
 	std::vector<KigyoResz> reszek;
 	std::vector<fal> falak;
-	
+	eger _eger;
 };
 
 
