@@ -6,20 +6,18 @@ Snake::Snake(int x, int y, SDL_Renderer *renderer):
 {
 	
 		kep=IMG_LoadTexture(_renderer,"kep.bmp");
-		//rect.h=40;
-		//rect.w=40;
-		//rect.x=x;
-		//rect.y=y;
-		//r2.h=40;
-		//r2.w=40;
-		//r2.x=0;
-		//r2.y=0;
 		KigyoResz k1(x,y,180);
 		k1.setSrcrect(0,0,40,40);
 		reszek.push_back(k1);
 		tx=reszek[0].getDstrect().x+reszek[0].getDstrect().w;
 		ty=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
-		
+		SDL_Texture* kep1,*kep2;
+		kep1=IMG_LoadTexture(_renderer,"fal.bmp");
+		kep2=IMG_LoadTexture(_renderer,"fal2.bmp");
+		addFal(0,0,10,1028,kep1);
+		addFal(0,710,10,1028,kep1);
+		addFal(0,0,720,10,kep2);
+		addFal(1018,0,720,10,kep2);
 }
 
 void Snake::kiir(){
@@ -27,10 +25,18 @@ void Snake::kiir(){
 	for(int i=0;i<reszek.size();i++){
 		reszek[i].kiir(_renderer,kep);
 	}
+	for (int i = 0; i < falak.size(); i++)
+	{
+		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
+	}
 }
 
 Snake::~Snake(){
 	SDL_DestroyTexture(kep);
+	for (int i = 0; i < falak.size(); i++)
+	{
+		SDL_DestroyTexture(falak[i].kep);
+	}
 	SDL_DestroyRenderer(_renderer);
 }
 
@@ -49,7 +55,6 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 				break;
 
 			case SDLK_SPACE:
-				//KigyoResz k1(reszek[reszek.size()].getDstrect().x,reszek[reszek.size()].getDstrect().y,reszek[reszek.size()].getSzog());
  				reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
 				if(reszek.size()>2){
 				reszek[reszek.size()-1].setSrcrect(60,0,40,20);
@@ -64,7 +69,6 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 			ty+=sin((reszek[0].getSzog()-180)*(M_PI/180))*3;
 	
 			reszek[0].setDstrect( tx-reszek[0].getDstrect().w, ty-reszek[0].getDstrect().h/2 );
-			//rect.y=ty-rect.h/2;
 
 			helyek h1;
 			h1.x=reszek[0].getDstrect().x;
@@ -78,19 +82,6 @@ void Snake::esemenyVar(SDL_Event &esemeny){
   			for(i=1;i<reszek.size();i++){
 				reszek[i].updateHely(reszek[i-1]);
 			}
-
-			//if(h.size()>=20){
-			//	r.x=h[0].x;
-			//	r.y=h[0].y;
-			//	szog1=h[0].szog;
-			//	h.erase(h.begin());
-			//	
-			//}
-  
-		
-
-			//std::cout <<"size:"<<h.size()<<"\n";
-			//std::cout <<"\t"<<"Y:"<<r.y<<"\n";
 			break;
 		}
 }
@@ -98,6 +89,19 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 void Snake::addResz(int x, int y, double szog){
 	KigyoResz k1(x,y,szog);
 	reszek.push_back(k1);
+}
+
+void Snake::addFal(int x, int y, int h, int w, SDL_Texture* kep){
+	SDL_Rect tRect;
+	tRect.x=x;
+	tRect.y=y;
+	tRect.h=h;
+	tRect.w=w;
+	fal tfal;
+	tfal.rect=tRect;
+	tfal.kep=kep;
+	kep=IMG_LoadTexture(_renderer,"fal.bmp");
+	falak.push_back(tfal);
 }
 
 KigyoResz::KigyoResz(int x, int y, double szog)
@@ -135,5 +139,5 @@ std::vector<helyek>& KigyoResz::getHelyek(){
 }
 
 KigyoResz::~KigyoResz(){
-
+	
 }

@@ -10,6 +10,10 @@ struct helyek{
 	int y;
 	double szog;
 };
+struct fal{
+	SDL_Rect rect;
+	SDL_Texture* kep;
+};
 
 class KigyoResz
 {
@@ -41,12 +45,13 @@ public:
 	void update();
 	void esemenyVar(SDL_Event &esemeny);
 	void addResz(int x, int y, double szog);
+	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
 private:
 	SDL_Renderer *_renderer;
 	SDL_Texture* kep;
 	double tx, ty;
 	std::vector<KigyoResz> reszek;
-	std::vector<helyek> h;
+	std::vector<fal> falak;
 	
 };
 

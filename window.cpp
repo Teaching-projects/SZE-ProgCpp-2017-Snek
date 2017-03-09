@@ -56,5 +56,4 @@ void Window::clear() const{
 	SDL_RenderPresent(renderer);
 	SDL_SetRenderDrawColor(renderer, 100,100,100,240);
 	SDL_RenderClear(renderer);
-
 }
