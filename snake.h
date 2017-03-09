@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
+#include <stdlib.h> 
+#include <time.h> 
 
 struct helyek{
 	int x;
@@ -52,6 +54,8 @@ public:
 	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
 	void addEger(int x, int y, int h, int w, SDL_Texture* kep);
 	bool utkozes(fal _fal);
+	void egerUtkozes();
+	void ujEgerHely();
 private:
 	SDL_Renderer *_renderer;
 	SDL_Texture* kep;

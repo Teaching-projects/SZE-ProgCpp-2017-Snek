@@ -24,7 +24,7 @@ Snake::Snake(int x, int y, SDL_Renderer *renderer):
 
 void Snake::kiir(){
 
-	for(int i=0;i<reszek.size();i++){
+	for(int i=reszek.size()-1;i>=0;i--){
 		reszek[i].kiir(_renderer,kep);
 	}
 	for (int i = 0; i < falak.size(); i++)
@@ -73,6 +73,7 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 				break;
 			}
 		case SDL_USEREVENT:
+			egerUtkozes();
 			tx+=cos((reszek[0].getSzog()-180)*(M_PI/180))*3;
 			ty+=sin((reszek[0].getSzog()-180)*(M_PI/180))*3;
 	
@@ -127,6 +128,28 @@ void Snake::addEger(int x, int y, int h, int w, SDL_Texture* kep){
 	_eger.rect=tRect;
 }
 
+void Snake::ujEgerHely(){
+	srand (time(NULL));
+
+	_eger.rect.x=rand() % 900 + 28;
+	_eger.rect.y=rand() % 600 + 28;
+}
+
+void Snake::egerUtkozes(){
+if (reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
+   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _eger.rect.x &&
+   reszek[0].getDstrect().y < _eger.rect.y + _eger.rect.h &&
+   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _eger.rect.y) {
+		std::cout<<"Ütközés egerrel\n";
+		reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
+		if(reszek.size()>2){
+			reszek[reszek.size()-1].setSrcrect(60,0,40,20);
+			reszek[reszek.size()-2].setSrcrect(40,0,40,20);
+			}
+		ujEgerHely();
+	}
+}
+
 bool Snake::utkozes(fal _fal){
 if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
    reszek[0].getDstrect().x + reszek[0].getDstrect().w > _fal.rect.x &&
@@ -135,13 +158,13 @@ if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
 		std::cout<<"Ütközés fallal\n";
 		return 1;
 	}
-if (reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
-   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _eger.rect.x &&
-   reszek[0].getDstrect().y < _eger.rect.y + _eger.rect.h &&
-   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _eger.rect.y) {
-		std::cout<<"Ütközés egerrel\n";
-		return 1;
-	}
+//if (reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
+//   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _eger.rect.x &&
+//   reszek[0].getDstrect().y < _eger.rect.y + _eger.rect.h &&
+//   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _eger.rect.y) {
+//		std::cout<<"Ütközés egerrel\n";
+//		return 1;
+//	}
 	return 0;
 }
 
