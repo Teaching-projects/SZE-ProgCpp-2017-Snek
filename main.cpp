@@ -21,6 +21,8 @@ void esemeny(Window &ablak, Snake &kigyo){
 
 int main(int argc, char **argv)
 {
+	int elozoido=SDL_GetTicks();
+	int frame=0;
 	Window ablak("SNAKE AI", 720,1028);
 	Snake kigyo(500,350,ablak.getRenderer());
 	SDL_TimerID idozito=SDL_AddTimer((33/10)*10,idozit,NULL);
@@ -28,7 +30,12 @@ int main(int argc, char **argv)
 		kigyo.kiir();
 		ablak.clear();
 		esemeny(ablak,kigyo);
-		
+		if(SDL_GetTicks()>=elozoido+1000){
+			std::cout<<frame<<"\n";
+			frame=0;
+			elozoido=SDL_GetTicks();
+		}
+		frame++;
 	}
 
 	return 0;

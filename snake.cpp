@@ -31,12 +31,8 @@ void Snake::kiir(){
 	for (int i = 0; i < falak.size(); i++)
 	{
 		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
-		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-		SDL_RenderDrawRect(_renderer,&falak[i].rect);
 	}
 	SDL_RenderCopyEx(_renderer,_eger.kep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
-	SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-	SDL_RenderDrawRect(_renderer,&_eger.rect);
 }
 
 Snake::~Snake(){
@@ -153,10 +149,25 @@ void Snake::ujEgerHely(){
 }
 
 void Snake::egerUtkozes(){
-if (reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
-   reszek[0].getDstrect().x + reszek[0].getDstrect().w > _eger.rect.x &&
-   reszek[0].getDstrect().y < _eger.rect.y + _eger.rect.h &&
-   reszek[0].getDstrect().h + reszek[0].getDstrect().y > _eger.rect.y && !_eger.keelUjHely) {
+
+	SDL_Rect tempKigyoFej, tempEger;
+	int tx,ty;
+	tempKigyoFej.w=15;
+	tempKigyoFej.h=15;
+	tx=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2;
+	ty=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
+	tempKigyoFej.x=tx-tempKigyoFej.w/2;
+	tempKigyoFej.y=ty-tempKigyoFej.h/2;
+
+	tempEger.x=_eger.rect.x;
+	tempEger.y=_eger.rect.y+10;
+	tempEger.h=_eger.rect.h-20;
+	tempEger.w=_eger.rect.w-5;
+
+if (tempKigyoFej.x < tempEger.x + tempEger.w &&
+   tempKigyoFej.x + tempKigyoFej.w > tempEger.x &&
+   tempKigyoFej.y < tempEger.y + tempEger.h &&
+   tempKigyoFej.h + tempKigyoFej.y > tempEger.y && !_eger.keelUjHely) {
 		std::cout<<"Ütközés egerrel\n";
 		reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
 		if(reszek.size()>2){
@@ -199,16 +210,15 @@ void KigyoResz::updateHely(KigyoResz elozo){
 		dstrect.x=elozo.getHelyek()[0].x;
 		dstrect.y=elozo.getHelyek()[0].y;
 		_szog=elozo.getHelyek()[0].szog;
-		elozo.getHelyek().erase(elozo._hely.begin()+1);
+		elozo.getHelyek().erase(elozo._hely.begin());
 		_hely.push_back(elozo.getHelyek()[0]);
 		if(_hely.size()>=15){_hely.erase(_hely.begin());};
 	}
 }
 
 void KigyoResz::kiir(SDL_Renderer *renderer, SDL_Texture* kep ){
+
  	SDL_RenderCopyEx(renderer,kep,&srcrect,&dstrect,_szog,nullptr,SDL_FLIP_NONE);
-	SDL_SetRenderDrawColor(renderer, 200,10,10,240);
-	SDL_RenderDrawRect(renderer,&dstrect);
 }
 std::vector<helyek>& KigyoResz::getHelyek(){
 	return _hely;
