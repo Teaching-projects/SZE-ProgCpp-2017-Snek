@@ -1,3 +1,4 @@
+#pragma once
 #include "window.h"
 #include "snake.h"
 #include <iostream>
@@ -21,6 +22,7 @@ void esemeny(Window &ablak, Snake &kigyo){
 
 int main(int argc, char **argv)
 {
+	srand (time(NULL));
 	int elozoido=SDL_GetTicks();
 	int frame=0;
 	Window ablak("SNAKE AI", 720,1028);
@@ -28,6 +30,7 @@ int main(int argc, char **argv)
 	SDL_TimerID idozito=SDL_AddTimer((33/10)*10,idozit,NULL);
 	while(!ablak.isClosed()){
 		kigyo.kiir();
+		kigyo.latasRajzol();
 		ablak.clear();
 		esemeny(ablak,kigyo);
 		if(SDL_GetTicks()>=elozoido+1000){

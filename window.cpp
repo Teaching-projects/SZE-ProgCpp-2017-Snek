@@ -1,3 +1,5 @@
+#pragma once
+
 #include "window.h"
 #include <iostream>
 
@@ -53,6 +55,8 @@ void Window::esemenyVar(SDL_Event &esemeny){
 }
 
 void Window::clear() const{
+
+	
 
 	SDL_RenderPresent(renderer);
 	SDL_SetRenderDrawColor(renderer, 100,100,100,240);

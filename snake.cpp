@@ -33,6 +33,36 @@ void Snake::kiir(){
 		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
 	}
 	SDL_RenderCopyEx(_renderer,_eger.kep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
+	//int tempx,tempy;
+	//tempx=cos((reszek[0].getSzog()-180)*(M_PI/180))*300;
+	//tempy=sin((reszek[0].getSzog()-180)*(M_PI/180))*300;
+	//SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
+
+	//int tempx1,tempy1;
+	//tempx1=cos((reszek[0].getSzog()-180-15)*(M_PI/180))*300;
+	//tempy1=sin((reszek[0].getSzog()-180-15)*(M_PI/180))*300;
+	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx1 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy1);
+
+
+	//int tempx2,tempy2;
+	//tempx2=cos((reszek[0].getSzog()-180+15)*(M_PI/180))*300;
+	//tempy2=sin((reszek[0].getSzog()-180+15)*(M_PI/180))*300;
+	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx2 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy2);
+
+
+	//int tempx3,tempy3;
+	//tempx3=cos((reszek[0].getSzog()-180-30)*(M_PI/180))*300;
+	//tempy3=sin((reszek[0].getSzog()-180-30)*(M_PI/180))*300;
+	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx3 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy3);
+
+
+	//int tempx4,tempy4;
+	//tempx4=cos((reszek[0].getSzog()-180+30)*(M_PI/180))*300;
+	//tempy4=sin((reszek[0].getSzog()-180+30)*(M_PI/180))*300;
+	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx4 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy4);
+
+
 }
 
 Snake::~Snake(){
@@ -131,7 +161,7 @@ void Snake::addEger(int x, int y, int h, int w, SDL_Texture* kep){
 }
 
 void Snake::ujEgerHely(){
-	srand (time(NULL));
+	
 	_eger.rect.x=rand() % 900 + 28;
 	_eger.rect.y=rand() % 600 + 28;
 	if(reszek[0].getDstrect().x < _eger.rect.x + _eger.rect.w &&
@@ -187,6 +217,107 @@ if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
 		return 1;
 	}
 	return 0;
+}
+
+void Snake::latasRajzol(){
+
+	int tempx,tempy;
+	SDL_Point pont,a,b,c;
+	pont.x=_eger.rect.x+_eger.rect.w/2;
+	pont.y=_eger.rect.y+_eger.rect.h/2;
+
+	for (int i = 0; i <= 90; i+=15)
+	{
+
+		tempx=cos((reszek[0].getSzog()-180-i)*(M_PI/180))*400;
+		tempy=sin((reszek[0].getSzog()-180-i)*(M_PI/180))*400;
+		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+		SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
+
+
+		a.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2;
+		a.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
+
+		b.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+		b.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+		tempx=cos((reszek[0].getSzog()-180-i+15)*(M_PI/180))*400;
+		tempy=sin((reszek[0].getSzog()-180-i+15)*(M_PI/180))*400;
+		c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+		c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+
+		if(pontHaromszogben(pont,a,b,c)){
+			SDL_SetRenderDrawColor(_renderer, 10,200,10,240);
+			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
+			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+		}
+	}
+
+	for (int i = 0; i <= 90; i+=15)
+	{
+
+		tempx=cos((reszek[0].getSzog()-180+i)*(M_PI/180))*400;
+		tempy=sin((reszek[0].getSzog()-180+i)*(M_PI/180))*400;
+		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+		SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
+
+		a.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2;
+		a.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
+
+		b.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+		b.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+		tempx=cos((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
+		tempy=sin((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
+		c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+		c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+
+		if(pontHaromszogben(pont,a,b,c)){
+			SDL_SetRenderDrawColor(_renderer, 10,200,10,240);
+			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
+			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+		}
+	}
+}
+
+bool Snake::pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point c){
+	SDL_Point v0,v1,v2;
+	//v0 = C - A
+	v0.x=c.x-a.x;
+	v0.y=c.y-a.y;
+	
+	//v1 = B - A
+	v1.x=b.x-a.x;
+	v1.y=b.y-a.y;
+
+	//v2 = P - A
+	v2.x=pont.x-a.x;
+	v2.y=pont.y-a.y;
+
+	// Compute dot products
+	double dot00,dot01,dot02,dot11,dot12;
+	dot00 = dot(v0, v0);
+	dot01 = dot(v0, v1);
+	dot02 = dot(v0, v2);
+	dot11 = dot(v1, v1);
+	dot12 = dot(v1, v2);
+
+	// Compute barycentric coordinates
+	double invDenom,u,v;
+	invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+	
+	return (u >= 0) && (v >= 0) && (u + v < 1);
+
+}
+double Snake::dot(SDL_Point a, SDL_Point b){
+	double ap[]={a.x,a.y};
+	double bp[]={b.x,b.y};
+
+	return std::inner_product(std::begin(ap), std::end(ap), std::begin(bp), 0.0);
 }
 
 KigyoResz::KigyoResz(int x, int y, double szog)

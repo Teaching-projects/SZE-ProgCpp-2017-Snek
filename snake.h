@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
@@ -6,6 +7,7 @@
 #include <vector>
 #include <stdlib.h> 
 #include <time.h> 
+#include <numeric>
 
 struct helyek{
 	int x;
@@ -21,6 +23,7 @@ struct eger{
 	SDL_Texture* kep;
 	bool keelUjHely;
 };
+
 
 class KigyoResz
 {
@@ -57,6 +60,9 @@ public:
 	bool utkozes(fal _fal);
 	void egerUtkozes();
 	void ujEgerHely();
+	void latasRajzol();
+	bool pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point c);
+	double dot(SDL_Point a, SDL_Point b);
 private:
 	SDL_Renderer *_renderer;
 	SDL_Texture* kep;
