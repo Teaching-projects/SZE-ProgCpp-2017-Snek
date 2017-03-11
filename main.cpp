@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 		ablak.clear();
 		esemeny(ablak,kigyo);
 		if(SDL_GetTicks()>=elozoido+1000){
-			std::cout<<frame<<"\n";
+			//std::cout<<frame<<"\n";
 			frame=0;
 			elozoido=SDL_GetTicks();
 		}

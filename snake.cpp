@@ -1,5 +1,13 @@
 #pragma once
 #include "snake.h"
+//tavolság arány
+float tavolsag(SDL_Point point1, SDL_Point point2)
+{
+	float distance = sqrt( (point1.x - point2.x) * (point1.x - point2.x) +
+                            (point1.y - point2.y) * (point1.y - point2.y));
+	//std::cout<< distance/400<<"\n";
+    return distance;
+}
 
 Snake::Snake(int x, int y, SDL_Renderer *renderer):
 	_renderer(renderer) 
@@ -90,11 +98,11 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 				break;
 
 			case SDLK_SPACE:
- 				reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
-				if(reszek.size()>2){
-				reszek[reszek.size()-1].setSrcrect(60,0,40,20);
-				reszek[reszek.size()-2].setSrcrect(40,0,40,20);
-				}
+ 			//	reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
+				//if(reszek.size()>2){
+				//reszek[reszek.size()-1].setSrcrect(60,0,40,20);
+				//reszek[reszek.size()-2].setSrcrect(40,0,40,20);
+				
 				break;
 			default:
 				break;
@@ -220,53 +228,27 @@ if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
 }
 
 void Snake::latasRajzol(){
-
+	float hossz;
 	int tempx,tempy;
+	int szamlalo1=0;
+	int szamlalo2=12;
 	SDL_Point pont,a,b,c;
 	pont.x=_eger.rect.x+_eger.rect.w/2;
 	pont.y=_eger.rect.y+_eger.rect.h/2;
 
-	for (int i = 0; i <= 90; i+=15)
-	{
-
-		tempx=cos((reszek[0].getSzog()-180-i)*(M_PI/180))*400;
-		tempy=sin((reszek[0].getSzog()-180-i)*(M_PI/180))*400;
-		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-		SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
-
-
-		a.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2;
-		a.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
-
-		b.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
-		b.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
-
-		tempx=cos((reszek[0].getSzog()-180-i+15)*(M_PI/180))*400;
-		tempy=sin((reszek[0].getSzog()-180-i+15)*(M_PI/180))*400;
-		c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
-		c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
-
-
-		if(pontHaromszogben(pont,a,b,c)){
-			SDL_SetRenderDrawColor(_renderer, 10,200,10,240);
-			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
-			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
-		}
-	}
-
-	for (int i = 0; i <= 90; i+=15)
+	for (int i = -90; i <= 90; i+=15)
 	{
 
 		tempx=cos((reszek[0].getSzog()-180+i)*(M_PI/180))*400;
 		tempy=sin((reszek[0].getSzog()-180+i)*(M_PI/180))*400;
-		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-		SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
-
 		a.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2;
 		a.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
 
 		b.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
 		b.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+		SDL_RenderDrawLine(_renderer,a.x , a.y , b.x ,  b.y);
 
 		tempx=cos((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
 		tempy=sin((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
@@ -274,11 +256,32 @@ void Snake::latasRajzol(){
 		c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
 
 
-		if(pontHaromszogben(pont,a,b,c)){
-			SDL_SetRenderDrawColor(_renderer, 10,200,10,240);
+		if(pontHaromszogben(pont,a,b,c)&&i>-90){
+			SDL_SetRenderDrawColor(_renderer, 10,250*tavolsag(a,pont)/400,10,240);
 			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
 			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+			latasAdat[szamlalo1]=1-tavolsag(a,pont)/400;
+			szamlalo1++;
+		}else if(i>-90){
+			latasAdat[szamlalo1]=0;
+			szamlalo1++;
 		}
+		
+		if(falHaromszogben(a,b, hossz) && i>-90){
+			tempx=cos((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
+			tempy=sin((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
+			c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+			c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+
+			SDL_SetRenderDrawColor(_renderer, 10,30,180,240);
+			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+			latasAdat[szamlalo2]=1-hossz/400;
+			szamlalo2++;
+		}else if(i>-90){
+			latasAdat[szamlalo2]=0;
+			szamlalo2++;
+		}
+
 	}
 }
 
@@ -313,13 +316,34 @@ bool Snake::pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point
 	return (u >= 0) && (v >= 0) && (u + v < 1);
 
 }
+bool Snake::falHaromszogben(SDL_Point a, SDL_Point b, float &hossz){
+
+	if(b.y<5){
+		b.y=5;
+		hossz=tavolsag(a,b);
+		return true;
+	}else if(b.y>715){
+		b.y=715;
+		hossz=tavolsag(a,b);
+		return true;
+	}else if(b.x<5){
+		b.x=5;
+		hossz=tavolsag(a,b);
+		return true;
+	}else if(b.x>1023){
+		b.x=1023;
+		hossz=tavolsag(a,b);
+		return true;
+	}
+
+	return false;
+}
 double Snake::dot(SDL_Point a, SDL_Point b){
 	double ap[]={a.x,a.y};
 	double bp[]={b.x,b.y};
 
 	return std::inner_product(std::begin(ap), std::end(ap), std::begin(bp), 0.0);
 }
-
 KigyoResz::KigyoResz(int x, int y, double szog)
 {
 	dstrect.x=x;
