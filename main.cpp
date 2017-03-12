@@ -1,7 +1,9 @@
 #pragma once
 #include "window.h"
 #include "snake.h"
+#include "NeuralisHalo.h"
 #include <iostream>
+#include <vector>
 #undef main
 
 Uint32 idozit(Uint32 ido, void *adat){
@@ -25,9 +27,14 @@ int main(int argc, char **argv)
 	srand (time(NULL));
 	int elozoido=SDL_GetTicks();
 	int frame=0;
+	std::vector<unsigned> felepites;
+	felepites.push_back(24);
+	felepites.push_back(16);
+	felepites.push_back(16);
+	felepites.push_back(3);
 	Window ablak("SNAKE AI", 720,1028);
-	Snake kigyo(500,350,ablak.getRenderer());
-	SDL_TimerID idozito=SDL_AddTimer((33/10)*10,idozit,NULL);
+	Snake kigyo(500,350,ablak.getRenderer(), felepites);
+	SDL_TimerID idozito=SDL_AddTimer(1,idozit,NULL);
 	while(!ablak.isClosed()){
 		kigyo.kiir();
 		kigyo.latasRajzol();
@@ -40,6 +47,5 @@ int main(int argc, char **argv)
 		}
 		frame++;
 	}
-
 	return 0;
 }

@@ -8,6 +8,7 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include <numeric>
+#include "NeuralisHalo.h"
 
 struct helyek{
 	int x;
@@ -49,7 +50,7 @@ private:
 class Snake
 {
 public:
-	Snake(int x, int y, SDL_Renderer *renderer);
+	Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepites);
 	~Snake();
 	void kiir();
 	void update();
@@ -62,7 +63,7 @@ public:
 	void ujEgerHely();
 	void latasRajzol();
 	bool pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point c);
-	bool falHaromszogben(SDL_Point a, SDL_Point b, float &hossz);
+	bool falHaromszogben(SDL_Point a, SDL_Point b, double &hossz);
 	double dot(SDL_Point a, SDL_Point b);
 private:
 	SDL_Renderer *_renderer;
@@ -71,7 +72,8 @@ private:
 	std::vector<KigyoResz> reszek;
 	std::vector<fal> falak;
 	eger _eger;
-	float latasAdat[24];
+	std::vector<double> latasAdat;
+	NeuronHalo agy;
 };
 
 

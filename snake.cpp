@@ -1,16 +1,16 @@
 #pragma once
 #include "snake.h"
 //tavolság arány
-float tavolsag(SDL_Point point1, SDL_Point point2)
+double tavolsag(SDL_Point point1, SDL_Point point2)
 {
-	float distance = sqrt( (point1.x - point2.x) * (point1.x - point2.x) +
+	double distance = sqrt( (point1.x - point2.x) * (point1.x - point2.x) +
                             (point1.y - point2.y) * (point1.y - point2.y));
 	//std::cout<< distance/400<<"\n";
     return distance;
 }
 
-Snake::Snake(int x, int y, SDL_Renderer *renderer):
-	_renderer(renderer) 
+Snake::Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepites):
+	_renderer(renderer), agy(felepites)
 {
 	
 		kep=IMG_LoadTexture(_renderer,"kep.bmp");
@@ -29,6 +29,7 @@ Snake::Snake(int x, int y, SDL_Renderer *renderer):
 		addFal(1018,0,720,10,kep2);
 		addEger(300,300,40,40,egerKep);
 		_eger.keelUjHely=false;
+
 }
 
 void Snake::kiir(){
@@ -41,35 +42,6 @@ void Snake::kiir(){
 		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
 	}
 	SDL_RenderCopyEx(_renderer,_eger.kep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
-	//int tempx,tempy;
-	//tempx=cos((reszek[0].getSzog()-180)*(M_PI/180))*300;
-	//tempy=sin((reszek[0].getSzog()-180)*(M_PI/180))*300;
-	//SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy);
-
-	//int tempx1,tempy1;
-	//tempx1=cos((reszek[0].getSzog()-180-15)*(M_PI/180))*300;
-	//tempy1=sin((reszek[0].getSzog()-180-15)*(M_PI/180))*300;
-	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx1 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy1);
-
-
-	//int tempx2,tempy2;
-	//tempx2=cos((reszek[0].getSzog()-180+15)*(M_PI/180))*300;
-	//tempy2=sin((reszek[0].getSzog()-180+15)*(M_PI/180))*300;
-	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx2 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy2);
-
-
-	//int tempx3,tempy3;
-	//tempx3=cos((reszek[0].getSzog()-180-30)*(M_PI/180))*300;
-	//tempy3=sin((reszek[0].getSzog()-180-30)*(M_PI/180))*300;
-	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx3 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy3);
-
-
-	//int tempx4,tempy4;
-	//tempx4=cos((reszek[0].getSzog()-180+30)*(M_PI/180))*300;
-	//tempy4=sin((reszek[0].getSzog()-180+30)*(M_PI/180))*300;
-	//SDL_RenderDrawLine(_renderer,reszek[0].getDstrect().x+reszek[0].getDstrect().w/2 , reszek[0].getDstrect().y+reszek[0].getDstrect().h/2 , reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx4 ,  reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy4);
-
 
 }
 
@@ -98,11 +70,11 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 				break;
 
 			case SDLK_SPACE:
- 			//	reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
-				//if(reszek.size()>2){
-				//reszek[reszek.size()-1].setSrcrect(60,0,40,20);
-				//reszek[reszek.size()-2].setSrcrect(40,0,40,20);
-				
+ 				reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
+				if(reszek.size()>2){
+				reszek[reszek.size()-1].setSrcrect(60,0,40,20);
+				reszek[reszek.size()-2].setSrcrect(40,0,40,20);
+				}
 				break;
 			default:
 				break;
@@ -134,6 +106,16 @@ void Snake::esemenyVar(SDL_Event &esemeny){
 			for (int i = 0; i < falak.size(); i++)
 			{
 				utkozes(falak[i]);
+			}
+			std::vector<double> eredmeny;
+			agy.futtat(latasAdat);
+			agy.getEredmeny(eredmeny);
+			if(eredmeny[0]>eredmeny[1] && eredmeny[0]>eredmeny[2])
+			{
+				reszek[0].setSzog(reszek[0].getSzog()-7);
+			}
+			else if(eredmeny[1]>eredmeny[0] && eredmeny[1]>eredmeny[2]){
+				reszek[0].setSzog(reszek[0].getSzog()+7);
 			}
 			break;
 		}
@@ -206,7 +188,7 @@ if (tempKigyoFej.x < tempEger.x + tempEger.w &&
    tempKigyoFej.x + tempKigyoFej.w > tempEger.x &&
    tempKigyoFej.y < tempEger.y + tempEger.h &&
    tempKigyoFej.h + tempKigyoFej.y > tempEger.y && !_eger.keelUjHely) {
-		std::cout<<"Ütközés egerrel\n";
+		//std::cout<<"Ütközés egerrel\n";
 		reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
 		if(reszek.size()>2){
 			reszek[reszek.size()-1].setSrcrect(60,0,40,20);
@@ -221,17 +203,16 @@ if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
    reszek[0].getDstrect().x + reszek[0].getDstrect().w > _fal.rect.x &&
    reszek[0].getDstrect().y < _fal.rect.y + _fal.rect.h &&
    reszek[0].getDstrect().h + reszek[0].getDstrect().y > _fal.rect.y) {
-		std::cout<<"Ütközés fallal\n";
+		//std::cout<<"Ütközés fallal\n";
 		return 1;
 	}
 	return 0;
 }
 
 void Snake::latasRajzol(){
-	float hossz;
+	double hossz;
 	int tempx,tempy;
-	int szamlalo1=0;
-	int szamlalo2=12;
+	latasAdat.clear();
 	SDL_Point pont,a,b,c;
 	pont.x=_eger.rect.x+_eger.rect.w/2;
 	pont.y=_eger.rect.y+_eger.rect.h/2;
@@ -260,11 +241,10 @@ void Snake::latasRajzol(){
 			SDL_SetRenderDrawColor(_renderer, 10,250*tavolsag(a,pont)/400,10,240);
 			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
 			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
-			latasAdat[szamlalo1]=1-tavolsag(a,pont)/400;
-			szamlalo1++;
+			latasAdat.push_back(1-tavolsag(a,pont)/400);
 		}else if(i>-90){
-			latasAdat[szamlalo1]=0;
-			szamlalo1++;
+			latasAdat.push_back(0);
+			
 		}
 		
 		if(falHaromszogben(a,b, hossz) && i>-90){
@@ -275,11 +255,9 @@ void Snake::latasRajzol(){
 
 			SDL_SetRenderDrawColor(_renderer, 10,30,180,240);
 			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
-			latasAdat[szamlalo2]=1-hossz/400;
-			szamlalo2++;
+			latasAdat.push_back(1-hossz/400);
 		}else if(i>-90){
-			latasAdat[szamlalo2]=0;
-			szamlalo2++;
+			latasAdat.push_back(0);
 		}
 
 	}
@@ -316,7 +294,7 @@ bool Snake::pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point
 	return (u >= 0) && (v >= 0) && (u + v < 1);
 
 }
-bool Snake::falHaromszogben(SDL_Point a, SDL_Point b, float &hossz){
+bool Snake::falHaromszogben(SDL_Point a, SDL_Point b, double &hossz){
 
 	if(b.y<5){
 		b.y=5;
@@ -378,7 +356,6 @@ void KigyoResz::kiir(SDL_Renderer *renderer, SDL_Texture* kep ){
 std::vector<helyek>& KigyoResz::getHelyek(){
 	return _hely;
 }
-
 KigyoResz::~KigyoResz(){
 	
 }
