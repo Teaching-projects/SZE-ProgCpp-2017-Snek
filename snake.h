@@ -9,6 +9,7 @@
 #include <time.h> 
 #include <numeric>
 #include "NeuralisHalo.h"
+#include <math.h>
 
 struct helyek{
 	int x;
@@ -21,7 +22,6 @@ struct fal{
 };
 struct eger{
 	SDL_Rect rect;
-	SDL_Texture* kep;
 	bool keelUjHely;
 };
 
@@ -50,30 +50,28 @@ private:
 class Snake
 {
 public:
-	Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepites);
+	Snake(int x, int y,SDL_Renderer *renderer, std::vector<unsigned> felepites);
 	~Snake();
-	void kiir();
-	void update();
-	void esemenyVar(SDL_Event &esemeny);
+	void kiir(SDL_Texture* kep,SDL_Texture* egerkep, SDL_Renderer *renderer);
+	void update(SDL_Renderer* _renderer);
 	void addResz(int x, int y, double szog);
-	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
-	void addEger(int x, int y, int h, int w, SDL_Texture* kep);
+	void addEger(int x, int y, int h, int w);
 	bool utkozes(fal _fal);
 	void egerUtkozes();
 	void ujEgerHely();
-	void latasRajzol();
+	void latasRajzol(SDL_Renderer* _renderer);
 	bool pontHaromszogben(SDL_Point pont, SDL_Point a, SDL_Point b, SDL_Point c);
 	bool falHaromszogben(SDL_Point a, SDL_Point b, double &hossz);
 	double dot(SDL_Point a, SDL_Point b);
+	long getElozoIdo();
+
 private:
-	SDL_Renderer *_renderer;
-	SDL_Texture* kep;
 	double tx, ty;
 	std::vector<KigyoResz> reszek;
-	std::vector<fal> falak;
 	eger _eger;
 	std::vector<double> latasAdat;
 	NeuronHalo agy;
+	long elozoIdo;
 };
 
 

@@ -2,6 +2,7 @@
 #include "window.h"
 #include "snake.h"
 #include "NeuralisHalo.h"
+#include "Jatek.h"
 #include <iostream>
 #include <vector>
 #undef main
@@ -12,13 +13,13 @@ Uint32 idozit(Uint32 ido, void *adat){
 	SDL_PushEvent(&event);
 	return ido;
 }
-void esemeny(Window &ablak, Snake &kigyo){
+void esemeny(Window &ablak, Jatek &j1){
 	SDL_Event event;
 
 	if(SDL_PollEvent(&event)){
-		
+		j1.update(event);
 		ablak.esemenyVar(event);
-		kigyo.esemenyVar(event);
+		/*kigyo.esemenyVar(event);*/
 	}
 }
 
@@ -33,19 +34,23 @@ int main(int argc, char **argv)
 	felepites.push_back(16);
 	felepites.push_back(3);
 	Window ablak("SNAKE AI", 720,1028);
-	Snake kigyo(500,350,ablak.getRenderer(), felepites);
+	//Snake kigyo(500,350,ablak.getRenderer(), felepites);
+	Jatek j1(20,ablak.getRenderer(),felepites);
 	SDL_TimerID idozito=SDL_AddTimer(1,idozit,NULL);
 	while(!ablak.isClosed()){
-		kigyo.kiir();
-		kigyo.latasRajzol();
+		//kigyo.kiir();
+		//kigyo.latasRajzol();
+		//ablak.clear();
+		//esemeny(ablak,kigyo);
+		j1.kiir();
 		ablak.clear();
-		esemeny(ablak,kigyo);
-		if(SDL_GetTicks()>=elozoido+1000){
-			//std::cout<<frame<<"\n";
-			frame=0;
-			elozoido=SDL_GetTicks();
-		}
-		frame++;
+		esemeny(ablak,j1);
+			if(SDL_GetTicks()>=elozoido+1000){
+				std::cout<<frame<<"\n";
+				frame=0;
+				elozoido=SDL_GetTicks();
+			}
+			frame++;
 	}
 	return 0;
 }

@@ -10,143 +10,91 @@ double tavolsag(SDL_Point point1, SDL_Point point2)
 }
 
 Snake::Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepites):
-	_renderer(renderer), agy(felepites)
+	 agy(felepites)
 {
-	
-		kep=IMG_LoadTexture(_renderer,"kep.bmp");
 		KigyoResz k1(x,y,180);
 		k1.setSrcrect(0,0,40,40);
 		reszek.push_back(k1);
 		tx=reszek[0].getDstrect().x+reszek[0].getDstrect().w;
 		ty=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2;
-		SDL_Texture* kep1,*kep2, *egerKep;
-		kep1=IMG_LoadTexture(_renderer,"fal.bmp");
-		kep2=IMG_LoadTexture(_renderer,"fal2.bmp");
-		egerKep=IMG_LoadTexture(_renderer,"eger.bmp");
-		addFal(0,0,10,1028,kep1);
-		addFal(0,710,10,1028,kep1);
-		addFal(0,0,720,10,kep2);
-		addFal(1018,0,720,10,kep2);
-		addEger(300,300,40,40,egerKep);
+		addEger(300,300,40,40);
+		ujEgerHely();
 		_eger.keelUjHely=false;
-
+		elozoIdo=SDL_GetTicks();
 }
 
-void Snake::kiir(){
+void Snake::kiir(SDL_Texture* kigyokep, SDL_Texture* egerkep, SDL_Renderer *renderer){
 
 	for(int i=reszek.size()-1;i>=0;i--){
-		reszek[i].kiir(_renderer,kep);
+		reszek[i].kiir(renderer,kigyokep);
 	}
-	for (int i = 0; i < falak.size(); i++)
-	{
-		SDL_RenderCopyEx(_renderer,falak[i].kep,NULL,&falak[i].rect,0,nullptr,SDL_FLIP_NONE);
-	}
-	SDL_RenderCopyEx(_renderer,_eger.kep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer,egerkep,NULL,&_eger.rect,0,nullptr,SDL_FLIP_NONE);
 
 }
 
 Snake::~Snake(){
-	SDL_DestroyTexture(kep);
-	for (int i = 0; i < falak.size(); i++)
-	{
-		SDL_DestroyTexture(falak[i].kep);
-	}
-	SDL_DestroyTexture(_eger.kep);
-	SDL_DestroyRenderer(_renderer);
+	//SDL_DestroyTexture(kep);
+	//for (int i = 0; i < falak.size(); i++)
+	//{
+	//	SDL_DestroyTexture(falak[i].kep);
+	//}
+	//SDL_DestroyTexture(kep);
+	//SDL_DestroyRenderer(_renderer);
 }
 
-void Snake::esemenyVar(SDL_Event &esemeny){
-	int i;
-	switch(esemeny.type){
-		case SDL_KEYDOWN:
-			switch (esemeny.key.keysym.sym)
-			{
-			case SDLK_LEFT:
-				reszek[0].setSzog(reszek[0].getSzog()-7);
-				break;
-
-			case SDLK_RIGHT:
-				reszek[0].setSzog(reszek[0].getSzog()+7);
-				break;
-
-			case SDLK_SPACE:
- 				reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
-				if(reszek.size()>2){
-				reszek[reszek.size()-1].setSrcrect(60,0,40,20);
-				reszek[reszek.size()-2].setSrcrect(40,0,40,20);
-				}
-				break;
-			default:
-				break;
-			}
-		case SDL_USEREVENT:
-			if(_eger.keelUjHely){
-				ujEgerHely();
-			}
-			else{
-				egerUtkozes();
-			}
-			tx+=cos((reszek[0].getSzog()-180)*(M_PI/180))*3;
-			ty+=sin((reszek[0].getSzog()-180)*(M_PI/180))*3;
-	
-			reszek[0].setDstrect( tx-reszek[0].getDstrect().w, ty-reszek[0].getDstrect().h/2 );
-
-			helyek h1;
-			h1.x=reszek[0].getDstrect().x;
-			h1.y=reszek[0].getDstrect().y;
-			h1.szog=reszek[0].getSzog();
-			reszek[0].addHely(h1);
- 			if(reszek[0].getHelyek().size()>=15){
-				reszek[0].getHelyek().erase(reszek[0].getHelyek().begin());
-			}
-			
-  			for(i=1;i<reszek.size();i++){
-				reszek[i].updateHely(reszek[i-1]);
-			}
-			for (int i = 0; i < falak.size(); i++)
-			{
-				utkozes(falak[i]);
-			}
-			std::vector<double> eredmeny;
-			agy.futtat(latasAdat);
-			agy.getEredmeny(eredmeny);
-			if(eredmeny[0]>eredmeny[1] && eredmeny[0]>eredmeny[2])
-			{
-				reszek[0].setSzog(reszek[0].getSzog()-7);
-			}
-			else if(eredmeny[1]>eredmeny[0] && eredmeny[1]>eredmeny[2]){
-				reszek[0].setSzog(reszek[0].getSzog()+7);
-			}
-			break;
-		}
-}
+//void Snake::esemenyVar(SDL_Event &esemeny){
+//	int i;
+//	switch(esemeny.type){
+//		case SDL_KEYDOWN:
+//			switch (esemeny.key.keysym.sym)
+//			{
+//			case SDLK_LEFT:
+//				reszek[0].setSzog(reszek[0].getSzog()-7);
+//				break;
+//
+//			case SDLK_RIGHT:
+//				reszek[0].setSzog(reszek[0].getSzog()+7);
+//				break;
+//
+//			case SDLK_SPACE:
+// 				reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
+//				if(reszek.size()>2){
+//				reszek[reszek.size()-1].setSrcrect(60,0,40,20);
+//				reszek[reszek.size()-2].setSrcrect(40,0,40,20);
+//				}
+//				break;
+//			default:
+//				break;
+//			}
+//		case SDL_USEREVENT:
+//			update();
+//			break;
+//		}
+//}
 
 void Snake::addResz(int x, int y, double szog){
 	KigyoResz k1(x,y,szog);
 	reszek.push_back(k1);
 }
 
-void Snake::addFal(int x, int y, int h, int w, SDL_Texture* kep){
-	SDL_Rect tRect;
-	tRect.x=x;
-	tRect.y=y;
-	tRect.h=h;
-	tRect.w=w;
-	fal tfal;
-	tfal.rect=tRect;
-	tfal.kep=kep;
-	falak.push_back(tfal);
-}
+//void Snake::addFal(int x, int y, int h, int w, SDL_Texture* kep){
+//	SDL_Rect tRect;
+//	tRect.x=x;
+//	tRect.y=y;
+//	tRect.h=h;
+//	tRect.w=w;
+//	fal tfal;
+//	tfal.rect=tRect;
+//	tfal.kep=kep;
+//	falak.push_back(tfal);
+//}
 
-void Snake::addEger(int x, int y, int h, int w, SDL_Texture* kep){
+void Snake::addEger(int x, int y, int h, int w){
 	SDL_Rect tRect;
 	tRect.x=x;
 	tRect.y=y;
 	tRect.h=h;
 	tRect.w=w;
-	fal tfal;
-	tfal.rect=tRect;
-	_eger.kep=kep;
 	_eger.rect=tRect;
 }
 
@@ -194,6 +142,7 @@ if (tempKigyoFej.x < tempEger.x + tempEger.w &&
 			reszek[reszek.size()-1].setSrcrect(60,0,40,20);
 			reszek[reszek.size()-2].setSrcrect(40,0,40,20);
 			}
+		elozoIdo=SDL_GetTicks();
 		ujEgerHely();
 	}
 }
@@ -209,7 +158,7 @@ if (reszek[0].getDstrect().x < _fal.rect.x + _fal.rect.w &&
 	return 0;
 }
 
-void Snake::latasRajzol(){
+void Snake::latasRajzol(SDL_Renderer* _renderer){
 	double hossz;
 	int tempx,tempy;
 	latasAdat.clear();
@@ -228,8 +177,8 @@ void Snake::latasRajzol(){
 		b.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
 		b.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
 
-		SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
-		SDL_RenderDrawLine(_renderer,a.x , a.y , b.x ,  b.y);
+		//SDL_SetRenderDrawColor(_renderer, 200,10,10,240);
+		//SDL_RenderDrawLine(_renderer,a.x , a.y , b.x ,  b.y);
 
 		tempx=cos((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
 		tempy=sin((reszek[0].getSzog()-180+i-15)*(M_PI/180))*400;
@@ -238,9 +187,9 @@ void Snake::latasRajzol(){
 
 
 		if(pontHaromszogben(pont,a,b,c)&&i>-90){
-			SDL_SetRenderDrawColor(_renderer, 10,250*tavolsag(a,pont)/400,10,240);
-			SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
-			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+			//SDL_SetRenderDrawColor(_renderer, 10,250*tavolsag(a,pont)/300,10,240);
+			//SDL_RenderDrawLine(_renderer,a.x,a.y,b.x,b.y);
+			//SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
 			latasAdat.push_back(1-tavolsag(a,pont)/400);
 		}else if(i>-90){
 			latasAdat.push_back(0);
@@ -248,13 +197,13 @@ void Snake::latasRajzol(){
 		}
 		
 		if(falHaromszogben(a,b, hossz) && i>-90){
-			tempx=cos((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
-			tempy=sin((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
-			c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
-			c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
+			//tempx=cos((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
+			//tempy=sin((reszek[0].getSzog()-180+i-7.5)*(M_PI/180))*hossz/2;
+			//c.x=reszek[0].getDstrect().x+reszek[0].getDstrect().w/2+tempx;
+			//c.y=reszek[0].getDstrect().y+reszek[0].getDstrect().h/2+tempy;
 
-			SDL_SetRenderDrawColor(_renderer, 10,30,180,240);
-			SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
+			//SDL_SetRenderDrawColor(_renderer, 10,30,180,240);
+			//SDL_RenderDrawLine(_renderer,a.x,a.y,c.x,c.y);
 			latasAdat.push_back(1-hossz/400);
 		}else if(i>-90){
 			latasAdat.push_back(0);
@@ -321,6 +270,46 @@ double Snake::dot(SDL_Point a, SDL_Point b){
 	double bp[]={b.x,b.y};
 
 	return std::inner_product(std::begin(ap), std::end(ap), std::begin(bp), 0.0);
+}
+void Snake::update(SDL_Renderer* _renderer){
+	if(_eger.keelUjHely){
+		ujEgerHely();
+	}
+	else{
+		egerUtkozes();
+	}
+	tx+=cos((reszek[0].getSzog()-180)*(M_PI/180))*3;
+	ty+=sin((reszek[0].getSzog()-180)*(M_PI/180))*3;
+	
+			reszek[0].setDstrect( tx-reszek[0].getDstrect().w, ty-reszek[0].getDstrect().h/2 );
+
+			helyek h1;
+			h1.x=reszek[0].getDstrect().x;
+			h1.y=reszek[0].getDstrect().y;
+			h1.szog=reszek[0].getSzog();
+			reszek[0].addHely(h1);
+ 			if(reszek[0].getHelyek().size()>=15){
+				reszek[0].getHelyek().erase(reszek[0].getHelyek().begin());
+			}
+			
+  			for(int i=1;i<reszek.size();i++){
+				reszek[i].updateHely(reszek[i-1]);
+			}
+
+			latasRajzol(_renderer);
+			std::vector<double> eredmeny;
+			agy.futtat(latasAdat);
+			agy.getEredmeny(eredmeny);
+			if(eredmeny[0]>eredmeny[1] && eredmeny[0]>eredmeny[2])
+			{
+				reszek[0].setSzog(reszek[0].getSzog()-7);
+			}
+			else if(eredmeny[1]>eredmeny[0] && eredmeny[1]>eredmeny[2]){
+				reszek[0].setSzog(reszek[0].getSzog()+7);
+			}
+}
+long Snake::getElozoIdo(){
+	return elozoIdo;
 }
 KigyoResz::KigyoResz(int x, int y, double szog)
 {
