@@ -64,7 +64,9 @@ public:
 	bool falHaromszogben(SDL_Point a, SDL_Point b, double &hossz);
 	double dot(SDL_Point a, SDL_Point b);
 	long getElozoIdo();
-
+	double getFittness();
+	void getGenek(std::vector<double>& genek);
+	void setGenek(std::vector<double>& genek);
 private:
 	double tx, ty;
 	std::vector<KigyoResz> reszek;
@@ -72,6 +74,9 @@ private:
 	std::vector<double> latasAdat;
 	NeuronHalo agy;
 	long elozoIdo;
+	long elethossz;
+	int kigyoHossz;
+	//short lepeskoz;
 };
 
 

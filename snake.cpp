@@ -21,6 +21,9 @@ Snake::Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepit
 		ujEgerHely();
 		_eger.keelUjHely=false;
 		elozoIdo=SDL_GetTicks();
+		elethossz=SDL_GetTicks();
+		kigyoHossz=1;
+		//lepeskoz=0;
 }
 
 void Snake::kiir(SDL_Texture* kigyokep, SDL_Texture* egerkep, SDL_Renderer *renderer){
@@ -137,6 +140,8 @@ if (tempKigyoFej.x < tempEger.x + tempEger.w &&
    tempKigyoFej.y < tempEger.y + tempEger.h &&
    tempKigyoFej.h + tempKigyoFej.y > tempEger.y && !_eger.keelUjHely) {
 		//std::cout<<"Ütközés egerrel\n";
+	   if((kigyoHossz+10) % 10 == 0){
+		kigyoHossz++;
 		reszek.push_back(KigyoResz(reszek[reszek.size()-1].getDstrect().x,reszek[reszek.size()-1].getDstrect().y,reszek[reszek.size()-1].getSzog()));
 		if(reszek.size()>2){
 			reszek[reszek.size()-1].setSrcrect(60,0,40,20);
@@ -144,6 +149,12 @@ if (tempKigyoFej.x < tempEger.x + tempEger.w &&
 			}
 		elozoIdo=SDL_GetTicks();
 		ujEgerHely();
+
+	   }else{
+		   kigyoHossz++;
+		   elozoIdo=SDL_GetTicks();
+		   ujEgerHely();
+	   }
 	}
 }
 
@@ -278,6 +289,7 @@ void Snake::update(SDL_Renderer* _renderer){
 	else{
 		egerUtkozes();
 	}
+	//lepeskoz++;
 	tx+=cos((reszek[0].getSzog()-180)*(M_PI/180))*3;
 	ty+=sin((reszek[0].getSzog()-180)*(M_PI/180))*3;
 	
@@ -295,21 +307,34 @@ void Snake::update(SDL_Renderer* _renderer){
   			for(int i=1;i<reszek.size();i++){
 				reszek[i].updateHely(reszek[i-1]);
 			}
-
-			latasRajzol(_renderer);
-			std::vector<double> eredmeny;
-			agy.futtat(latasAdat);
-			agy.getEredmeny(eredmeny);
-			if(eredmeny[0]>eredmeny[1] && eredmeny[0]>eredmeny[2])
-			{
-				reszek[0].setSzog(reszek[0].getSzog()-7);
-			}
-			else if(eredmeny[1]>eredmeny[0] && eredmeny[1]>eredmeny[2]){
-				reszek[0].setSzog(reszek[0].getSzog()+7);
-			}
+			//if(lepeskoz==2){
+				//lepeskoz=0;
+				latasRajzol(_renderer);
+				std::vector<double> eredmeny;
+				agy.futtat(latasAdat);
+				agy.getEredmeny(eredmeny);
+				if(eredmeny[0]>eredmeny[1] && eredmeny[0]>eredmeny[2])
+				{
+					reszek[0].setSzog(reszek[0].getSzog()-7);
+				}
+				else if(eredmeny[1]>eredmeny[0] && eredmeny[1]>eredmeny[2]){
+					reszek[0].setSzog(reszek[0].getSzog()+7);
+				}
+			//}
 }
 long Snake::getElozoIdo(){
 	return elozoIdo;
+}
+double Snake::getFittness(){
+	double temp=(SDL_GetTicks()-elethossz)/1000;
+	return temp+kigyoHossz*10;
+}
+void Snake::getGenek(std::vector<double>& genek){
+	agy.getSulyok(genek);
+}
+
+void Snake::setGenek(std::vector<double>& genek){
+	agy.setSulyok(genek);
 }
 KigyoResz::KigyoResz(int x, int y, double szog)
 {

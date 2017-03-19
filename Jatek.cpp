@@ -1,13 +1,14 @@
 #include "Jatek.h"
 
 
-Jatek::Jatek(unsigned darab, SDL_Renderer* renderer, std::vector<unsigned>& felepites):
-	_renderer(renderer)
+Jatek::Jatek(unsigned darab,unsigned generacio, SDL_Renderer* renderer, std::vector<unsigned>& felepites):
+	_renderer(renderer), _darab(darab), _felepites(felepites), _generacio(generacio)
 {
 	SDL_Texture* kep1,*kep2;
 	kep=IMG_LoadTexture(_renderer,"kep.bmp");
 	egerkep=IMG_LoadTexture(renderer,"eger.bmp");
-	for (int i = 0; i < darab; i++)
+	jelenlegiGeneracio=0;
+	for (int i = 0; i < _darab; i++)
 	{
 		kigyok.push_back(Snake(500,300,_renderer,felepites));
 	}
@@ -35,12 +36,37 @@ void Jatek::addFal(int x, int y, int h, int w, SDL_Texture* kep){
 void Jatek::update(SDL_Event &esemeny){
 		switch(esemeny.type){
 		case SDL_USEREVENT:
+		if(kigyok.size()==0 && jelenlegiGeneracio<=_generacio){
+			std::vector<std::vector<double>> ujGenek;
+			Evolucio e(egyedek);
+			e.kiir();
+			e.futtat();
+			ujGenek=e.getGenek();
+			kigyok.clear();
+			egyedek.clear();
+			for (int i = 0; i < _darab; i++)
+			{
+				kigyok.push_back(Snake(500,300,_renderer,_felepites));
+				kigyok.back().setGenek(ujGenek[i]);
+			}
+			jelenlegiGeneracio++;
+			std::cout<<"Jelenlegi Generacio:"<<jelenlegiGeneracio<<"\n\n";
+			//std::cout<<"kigyo db:"<<kigyok.size()<<"\n";
+		}
+
 		for (int i = 0; i <kigyok.size(); i++)
 		{
 
 			for (int j = 0; j < falak.size(); j++)
 			{
 				if(kigyok[i].utkozes(falak[j])){
+				//std::vector<double> genek;
+				//kigyok[i].getGenek(genek);
+				//std::cout<<genek.size()<<"\t"<<kigyok[i].getFittness()<<"\n";
+				egyed e;
+				e.fittness=kigyok[i].getFittness();
+				kigyok[i].getGenek(e.genek);
+				egyedek.push_back(e);
 					kigyok.erase(kigyok.begin()+i);
 					break;
 				}
@@ -52,10 +78,19 @@ void Jatek::update(SDL_Event &esemeny){
 		}
 	for (int i = 0; i < kigyok.size(); i++)
 	{
+		//std::cout<<kigyok[i].getFittness()<<"\n";
 			if(SDL_GetTicks()>=kigyok[i].getElozoIdo()+6000){
+			//std::vector<double> genek;
+			//kigyok[i].getGenek(genek);
+			//std::cout<<genek.size()<<"\t"<<kigyok[i].getFittness()<<"\n";
+				egyed e;
+				e.fittness=kigyok[i].getFittness();
+				kigyok[i].getGenek(e.genek);
+				egyedek.push_back(e);
 				kigyok.erase(kigyok.begin()+i);
 			}
 	}
+
 }
 
 void Jatek::kiir(){

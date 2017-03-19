@@ -34,19 +34,15 @@ int main(int argc, char **argv)
 	felepites.push_back(16);
 	felepites.push_back(3);
 	Window ablak("SNAKE AI", 720,1028);
-	//Snake kigyo(500,350,ablak.getRenderer(), felepites);
-	Jatek j1(20,ablak.getRenderer(),felepites);
+	Jatek j1(40,1000,ablak.getRenderer(),felepites);
 	SDL_TimerID idozito=SDL_AddTimer(1,idozit,NULL);
 	while(!ablak.isClosed()){
-		//kigyo.kiir();
-		//kigyo.latasRajzol();
-		//ablak.clear();
-		//esemeny(ablak,kigyo);
+
 		j1.kiir();
 		ablak.clear();
 		esemeny(ablak,j1);
 			if(SDL_GetTicks()>=elozoido+1000){
-				std::cout<<frame<<"\n";
+				//std::cout<<frame<<"\n";
 				frame=0;
 				elozoido=SDL_GetTicks();
 			}

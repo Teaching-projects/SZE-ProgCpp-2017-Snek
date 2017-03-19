@@ -13,10 +13,11 @@ public:
 	void futtat(const Reteg &elozoReteg);
 	void setKimenet(double ertek){kimenet=ertek; };
 	double getKimenet(void)const {return kimenet; };
+	//std::vector<double> getKimenetiSulyok(void)const {return kimenetiSulyok; };
 	static double aktivacio(double x);
+	std::vector<double> kimenetiSulyok;
 private:
 	double kimenet;
-	std::vector<double> kimenetiSulyok;
 	unsigned _index;
 };
 
@@ -25,6 +26,8 @@ public:
 	NeuronHalo(const std::vector<unsigned> &felepites);
 	void futtat(std::vector<double> &bemenetiErtek);
 	void getEredmeny(std::vector<double> &eredmeny) const;
+	void getSulyok(std::vector<double>& sulyok);
+	void setSulyok(std::vector<double> sulyok);
 private:
 	std::vector<Reteg> retegek;
 };

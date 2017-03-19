@@ -71,3 +71,29 @@ void NeuronHalo::getEredmeny(std::vector<double> &eredmeny) const{
 		eredmeny.push_back(retegek.back()[i].getKimenet());
 	}
 }
+void NeuronHalo::getSulyok(std::vector<double>& sulyok){
+	sulyok.reserve(retegek[0][0].kimenetiSulyok.size()*retegek[0].size() + retegek[1][0].kimenetiSulyok.size()*retegek[1].size() + retegek[2][0].kimenetiSulyok.size()*retegek[2].size());
+	for (int i = 0; i < retegek.size()-1; i++)
+	{
+		for (int j = 0; j < retegek[i].size(); j++)
+		{
+			//AB.reserve( A.size() + B.size() ); // preallocate memory
+			sulyok.insert( sulyok.end(), retegek[i][j].kimenetiSulyok.begin(), retegek[i][j].kimenetiSulyok.end() );
+			//AB.insert( AB.end(), B.begin(), B.end() );
+		}
+	}
+}
+void NeuronHalo::setSulyok(std::vector<double> sulyok){
+	int index=0;
+	int meret;
+	for (int i = 0; i < retegek.size()-1; i++)
+	{
+		for (int j = 0; j < retegek[i].size(); j++)
+		{
+			meret=retegek[i][j].kimenetiSulyok.size();
+			retegek[i][j].kimenetiSulyok.clear();
+			retegek[i][j].kimenetiSulyok.insert(retegek[i][j].kimenetiSulyok.begin(), sulyok.begin()+index, sulyok.begin()+index+meret );
+			index+=meret;
+		}
+	}
+}
