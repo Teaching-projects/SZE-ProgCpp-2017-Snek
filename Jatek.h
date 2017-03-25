@@ -8,9 +8,10 @@ class Jatek
 public:
 	Jatek(unsigned darab,unsigned generacio, SDL_Renderer* renderer, std::vector<unsigned>& felepites);
 	void addFal(int x, int y, int h, int w, SDL_Texture* kep);
-	void update(SDL_Event &esemeny);
+	void update();
 	void kiir();
 	int getKigyodb(){return kigyok.size();}
+	void setLatas(bool ertek);
 	~Jatek();
 private:
 	unsigned _darab;

@@ -77,9 +77,7 @@ void NeuronHalo::getSulyok(std::vector<double>& sulyok){
 	{
 		for (int j = 0; j < retegek[i].size(); j++)
 		{
-			//AB.reserve( A.size() + B.size() ); // preallocate memory
 			sulyok.insert( sulyok.end(), retegek[i][j].kimenetiSulyok.begin(), retegek[i][j].kimenetiSulyok.end() );
-			//AB.insert( AB.end(), B.begin(), B.end() );
 		}
 	}
 }

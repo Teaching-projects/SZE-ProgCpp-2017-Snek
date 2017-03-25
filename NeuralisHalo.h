@@ -13,7 +13,6 @@ public:
 	void futtat(const Reteg &elozoReteg);
 	void setKimenet(double ertek){kimenet=ertek; };
 	double getKimenet(void)const {return kimenet; };
-	//std::vector<double> getKimenetiSulyok(void)const {return kimenetiSulyok; };
 	static double aktivacio(double x);
 	std::vector<double> kimenetiSulyok;
 private:

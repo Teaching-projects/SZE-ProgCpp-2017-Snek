@@ -50,6 +50,7 @@ void Evolucio::mutacio(std::vector<double>& gen){
 void Evolucio::futtat(){
 	std::vector<double> kivalasztottak;
 	std::vector<double> ujGen;
+
 	egyed e;
 	e.fittness=0;
 	for (int i = 0; i < _egyedek.size(); i++)
