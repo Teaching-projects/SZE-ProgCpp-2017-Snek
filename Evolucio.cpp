@@ -12,7 +12,7 @@ void Evolucio::kivalasztas(std::vector<double>& kivalsztottak){
 
 	for (int i = 0; i < _egyedek.size(); i++)
 	{
-		for (int j = 0; j < _egyedek[i].fittness; j++)
+		for (int j = 0; j < (int)_egyedek[i].fittness; j++)
 		{
 			populacio.push_back(i);
 		}
@@ -59,6 +59,7 @@ void Evolucio::futtat(){
 			e=_egyedek[i];
 		}
 	}
+	
 	ujGenek.push_back(e.genek);
 	for (int i = 1; i < _egyedek.size(); i++)
 	{

@@ -68,6 +68,7 @@ public:
 	void getGenek(std::vector<double>& genek);
 	void setGenek(std::vector<double>& genek);
 	void setLatas(bool ertek){latas=ertek;};
+	NeuronHalo&	getAgy(){return agy;};
 private:
 	double tx, ty;
 	std::vector<KigyoResz> reszek;

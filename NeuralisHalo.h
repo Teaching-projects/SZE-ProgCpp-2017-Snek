@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 
 class Neuron;
 typedef std::vector<Neuron> Reteg;
@@ -27,6 +28,7 @@ public:
 	void getEredmeny(std::vector<double> &eredmeny) const;
 	void getSulyok(std::vector<double>& sulyok);
 	void setSulyok(std::vector<double> sulyok);
+	void mentFajlba(std::string fajlNev);
 private:
 	std::vector<Reteg> retegek;
 };

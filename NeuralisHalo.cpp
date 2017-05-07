@@ -95,3 +95,21 @@ void NeuronHalo::setSulyok(std::vector<double> sulyok){
 		}
 	}
 }
+void NeuronHalo::mentFajlba(std::string fajlNev){
+	std::ofstream outfile;
+	outfile.open(fajlNev);
+
+	for (int i = 0; i < retegek.size()-1; i++)
+	{
+		for (int j = 0; j < retegek[i].size(); j++)
+		{
+			for (int k = 0; k < retegek[i][j].kimenetiSulyok.size(); k++)
+			{
+				outfile << retegek[i][j].kimenetiSulyok[k]<<"\t";
+			}
+			outfile << std::endl;
+		}
+	}
+	outfile.close();
+
+}

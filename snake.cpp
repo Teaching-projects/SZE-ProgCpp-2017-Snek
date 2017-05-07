@@ -12,7 +12,7 @@ double tavolsag(SDL_Point point1, SDL_Point point2)
 Snake::Snake(int x, int y, SDL_Renderer *renderer, std::vector<unsigned> felepites):
 	 agy(felepites)
 {
-		KigyoResz k1(x,y,180);
+		KigyoResz k1(x,y,rand() % 360);
 		k1.setSrcrect(0,0,40,40);
 		reszek.push_back(k1);
 		tx=reszek[0].getDstrect().x+reszek[0].getDstrect().w;
@@ -281,8 +281,12 @@ long Snake::getElozoIdo(){
 	return elozoIdo;
 }
 double Snake::getFittness(){
-	double temp=(SDL_GetTicks()-elethossz)/1000;
-	return temp+kigyoHossz*10;
+	double temp=(SDL_GetTicks()-elethossz)+1/1000;
+	//std::cout<<temp<<"\t"<<kigyoHossz<<"\t"<<temp<<"\t"<<1+(kigyoHossz/temp)/12<<"\n";
+	if(kigyoHossz==0)
+		return 0;
+	else
+	return kigyoHossz*(1+((kigyoHossz)/temp)/12);
 }
 void Snake::getGenek(std::vector<double>& genek){
 	agy.getSulyok(genek);

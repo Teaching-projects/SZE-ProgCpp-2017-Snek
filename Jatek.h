@@ -2,6 +2,7 @@
 #include "snake.h"
 #include "Evolucio.h"
 #include <algorithm>
+#include <iterator>
 
 class Jatek
 {
@@ -12,11 +13,13 @@ public:
 	void kiir();
 	int getKigyodb(){return kigyok.size();}
 	void setLatas(bool ertek);
+	std::vector<double> beolvasEgyed(std::string fajlNev);
 	~Jatek();
 private:
 	unsigned _darab;
 	unsigned _generacio;
 	unsigned jelenlegiGeneracio;
+	unsigned legjobbFittness;
 	std::vector<Snake> kigyok;
 	std::vector<fal> falak;
 	std::vector<unsigned> _felepites;
