@@ -10,6 +10,8 @@
 #include <numeric>
 #include "NeuralisHalo.h"
 #include <math.h>
+#include <limits>
+#include <exception>
 
 struct helyek{
 	int x;

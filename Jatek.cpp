@@ -13,7 +13,11 @@ Jatek::Jatek(SDL_Renderer* renderer, std::vector<unsigned>& felepites):
 	{
 		kigyok.push_back(Snake(500,300,_renderer,felepites));
 		if(kezdo!="0"){
-		kigyok[i].setGenek(beolvasEgyed(kezdo));
+			try{
+				kigyok[i].setGenek(beolvasEgyed(kezdo));
+			}catch(std::exception e){
+				std::cout<<"Nem lehetett betölteni a kezdõ populáció tulajdonságát! Véletlenszerû tulajdonságokat kaptak!\n";
+			};
 		}
 	}
 
@@ -116,6 +120,9 @@ void Jatek::setLatas(bool ertek){
 }
 std::vector<double> Jatek::beolvasEgyed(std::string fajlNev){
 	std::ifstream is(fajlNev);
+	if(!is){
+		throw std::exception();
+	}
 	std::istream_iterator<double> start(is), end;
 	std::vector<double> sulyok(start, end);
 	is.close();
@@ -136,16 +143,78 @@ Jatek::~Jatek(){
 }
 
 void Jatek::adatBeker(){
-	std::cout<<"Adja meg az egyedek számát!(0-nál nagyobb egész szám)\n";
-	std::cin>>egyedDb;
-	std::cout<<"Adja meg hány generációig fusson az algoritmus!(0-nál nagyobb egész szám)\n";
-	std::cin>>generacio;
-	std::cout<<"Adja meg az egyedek mutációjának a valszínûségét(0-nál nagyobb és 100-nál kisebb egész szám)!\n";
-	std::cin>>mutacio;
-	std::cout<<"Adja meg az egyedek keresztezésének valószínûségét!(0-nál nagyobb és 100-nál kisebb egész szám)\n";
-	std::cin>>keresztezes;
-	std::cout<<"Adja meg a fájl nevét amibe a szimuláció legjobb egyedét szeretné elmenteni!(pl: legjobb.txt)\n";
-	std::cin>>legjobb;
+	bool tovabb=false;
+	while(!tovabb){
+		std::cout<<"Adja meg az egyedek számát!(0-nál nagyobb egész szám)\n";
+		std::cin>>egyedDb;
+		tovabb=true;
+		if(egyedDb<=0 || egyedDb>10000)
+		{
+			tovabb=false;
+			std::cout<<"Bevitt adat helyetelen! Adja meg újra!\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+	
+	tovabb=false;
+	while(!tovabb){
+		std::cout<<"Adja meg hány generációig fusson az algoritmus!(0-nál nagyobb egész szám)\n";
+		std::cin>>generacio;
+		tovabb=true;
+		if(generacio<=0 )
+		{
+			tovabb=false;
+			std::cout<<"Bevitt adat helyetelen! Adja meg újra!\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+
+	tovabb=false;
+	while(!tovabb){
+		std::cout<<"Adja meg az egyedek mutációjának a valszínûségét(0-nál nagyobb és 100-nál kisebb egész szám)!\n";
+		std::cin>>mutacio;
+		tovabb=true;
+		if(mutacio<0 || mutacio>100)
+		{
+			tovabb=false;
+			std::cout<<"Bevitt adat helyetelen! Adja meg újra!\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+	
+	tovabb=false;
+	while(!tovabb){
+		std::cout<<"Adja meg az egyedek keresztezésének valószínûségét!(0-nál nagyobb és 100-nál kisebb egész szám)\n";
+		std::cin>>keresztezes;
+		tovabb=true;
+		if(keresztezes<0 || keresztezes>100)
+		{
+			tovabb=false;
+			std::cout<<"Bevitt adat helyetelen! Adja meg újra!\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+
+	tovabb=false;
+	while(!tovabb){
+		std::cout<<"Adja meg a fájl nevét amibe a szimuláció legjobb egyedét szeretné elmenteni!(pl: legjobb.txt)\n";
+		std::cin>>legjobb;
+		tovabb=true;
+		std::ofstream outfile(legjobb);
+		if(legjobb.substr(legjobb.find_last_of(".") + 1) != "txt" || !outfile)
+		{
+			tovabb=false;
+			std::cout<<"Rosz fájlformátum vagy nem megfelelõ név! txt fájlformátumot adjon meg!\n";
+			outfile.close();
+		}else{
+			outfile.close();
+		}
+	}
+
 	std::cout<<"Ha szeretné, hogy a kezdõ populáció tulajdonságait egy meglévõ fájlból töltse be akkor adja meg a fájl nevét!(pl llegjobb4.txt)\nHa véletlen tulajdonságokat szeretne akkor írjon be egy 0-át!\n";
 	std::cin>>kezdo;
 }

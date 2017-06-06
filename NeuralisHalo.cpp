@@ -89,6 +89,9 @@ void NeuronHalo::setSulyok(std::vector<double> sulyok){
 		for (int j = 0; j < retegek[i].size(); j++)
 		{
 			meret=retegek[i][j].kimenetiSulyok.size();
+			if((index+meret) > sulyok.size() || index > sulyok.size()){
+				throw std::exception();
+			}
 			retegek[i][j].kimenetiSulyok.clear();
 			retegek[i][j].kimenetiSulyok.insert(retegek[i][j].kimenetiSulyok.begin(), sulyok.begin()+index, sulyok.begin()+index+meret );
 			index+=meret;
