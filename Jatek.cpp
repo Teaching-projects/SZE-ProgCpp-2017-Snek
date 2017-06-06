@@ -1,17 +1,20 @@
 #include "Jatek.h"
 
-Jatek::Jatek(unsigned darab,unsigned generacio, SDL_Renderer* renderer, std::vector<unsigned>& felepites):
-	_renderer(renderer), _darab(darab), _felepites(felepites), _generacio(generacio)
+Jatek::Jatek(SDL_Renderer* renderer, std::vector<unsigned>& felepites):
+	_renderer(renderer), _felepites(felepites)
 {
+	adatBeker();
 	SDL_Texture* kep1,*kep2;
 	kep=IMG_LoadTexture(_renderer,"kep.bmp");
 	egerkep=IMG_LoadTexture(renderer,"eger.bmp");
 	legjobbFittness=0;
 	jelenlegiGeneracio=0;
-	for (int i = 0; i < _darab; i++)
+	for (int i = 0; i < egyedDb; i++)
 	{
 		kigyok.push_back(Snake(500,300,_renderer,felepites));
-		//kigyok[i].setGenek(beolvasEgyed("legjobb7.txt"));
+		if(kezdo!="0"){
+		kigyok[i].setGenek(beolvasEgyed(kezdo));
+		}
 	}
 
 		kep1=IMG_LoadTexture(_renderer,"fal.bmp");
@@ -36,15 +39,15 @@ void Jatek::addFal(int x, int y, int h, int w, SDL_Texture* kep){
 
 void Jatek::update(){
 
-			if(kigyok.size()==0 && jelenlegiGeneracio<=_generacio){
+			if(kigyok.size()==0 && jelenlegiGeneracio<=generacio){
 				std::vector<std::vector<double>> ujGenek;
 				Evolucio e(egyedek);
 				e.kiir();
-				e.futtat();
+				e.futtat(mutacio,keresztezes);
 				ujGenek=e.getGenek();
 				kigyok.clear();
 				egyedek.clear();
-				for (int i = 0; i < _darab; i++)
+				for (int i = 0; i < egyedDb; i++)
 				{
 					kigyok.push_back(Snake(500,300,_renderer,_felepites));
 					kigyok.back().setGenek(ujGenek[i]);
@@ -64,7 +67,7 @@ void Jatek::update(){
 				kigyok[i].getGenek(e.genek);
 				egyedek.push_back(e);
 				if(e.fittness>legjobbFittness){
-					kigyok[i].getAgy().mentFajlba("legjobb9.txt");
+					kigyok[i].getAgy().mentFajlba(legjobb);
 					legjobbFittness=e.fittness;
 				}
 				kigyok.erase(kigyok.begin()+i);
@@ -81,7 +84,7 @@ void Jatek::update(){
 				kigyok[i].getGenek(e.genek);
 				egyedek.push_back(e);
 				if(e.fittness>legjobbFittness){
-					kigyok[i].getAgy().mentFajlba("legjobb9.txt");
+					kigyok[i].getAgy().mentFajlba(legjobb);
 					legjobbFittness=e.fittness;
 				}
 				kigyok.erase(kigyok.begin()+i);
@@ -130,4 +133,19 @@ Jatek::~Jatek(){
 	}
 	SDL_DestroyTexture(egerkep);
 	SDL_DestroyRenderer(_renderer);
+}
+
+void Jatek::adatBeker(){
+	std::cout<<"Adja meg az egyedek számát!(0-nál nagyobb egész szám)\n";
+	std::cin>>egyedDb;
+	std::cout<<"Adja meg hány generációig fusson az algoritmus!(0-nál nagyobb egész szám)\n";
+	std::cin>>generacio;
+	std::cout<<"Adja meg az egyedek mutációjának a valszínûségét(0-nál nagyobb és 100-nál kisebb egész szám)!\n";
+	std::cin>>mutacio;
+	std::cout<<"Adja meg az egyedek keresztezésének valószínûségét!(0-nál nagyobb és 100-nál kisebb egész szám)\n";
+	std::cin>>keresztezes;
+	std::cout<<"Adja meg a fájl nevét amibe a szimuláció legjobb egyedét szeretné elmenteni!(pl: legjobb.txt)\n";
+	std::cin>>legjobb;
+	std::cout<<"Ha szeretné, hogy a kezdõ populáció tulajdonságait egy meglévõ fájlból töltse be akkor adja meg a fájl nevét!(pl llegjobb4.txt)\nHa véletlen tulajdonságokat szeretne akkor írjon be egy 0-át!\n";
+	std::cin>>kezdo;
 }

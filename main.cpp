@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	felepites.push_back(2);
 	Window ablak("SNAKE AI", 720,1028);
 	//SDL_TimerID idozito=SDL_AddTimer(1,idozit,NULL);
-	Jatek j1(400,1000,ablak.getRenderer(),felepites);
+	Jatek j1(ablak.getRenderer(),felepites);
 	while(!ablak.isClosed()){
 			esemenykezeles(ablak,leptek,j1);
 			if(SDL_GetTicks()>=elozoido+leptek){

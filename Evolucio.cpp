@@ -38,16 +38,16 @@ std::vector<double> Evolucio::keresztezes(std::vector<double> szuloA, std::vecto
 	return gyerek;
 }
 
-void Evolucio::mutacio(std::vector<double>& gen){
+void Evolucio::mutacio(std::vector<double>& gen, int valsz){
 	for (int i = 0; i < gen.size(); i++)
 	{
-		if(rand() %100 <= 5){
+		if((rand() %100) < valsz){
 			gen[i]+= (double)rand() / RAND_MAX * (0.3)-0.15;
 		}
 	}
 }
 
-void Evolucio::futtat(){
+void Evolucio::futtat(int valszM, int valszK){
 	std::vector<double> kivalasztottak;
 	std::vector<double> ujGen;
 
@@ -67,8 +67,13 @@ void Evolucio::futtat(){
 		ujGen.clear();
 
 		kivalasztas(kivalasztottak);
-		ujGen=keresztezes(_egyedek[kivalasztottak[0]].genek , _egyedek[kivalasztottak[1]].genek);
-		mutacio(ujGen);
+		if(rand() %100 < valszK){
+			ujGen=keresztezes(_egyedek[kivalasztottak[0]].genek , _egyedek[kivalasztottak[1]].genek);
+		}
+		else{
+			ujGen=_egyedek[kivalasztottak[0]].genek;
+		}
+		mutacio(ujGen, valszM);
 		ujGenek.push_back(ujGen);
 	}
 }
@@ -77,6 +82,8 @@ void Evolucio::kiir(){
 	
 	double fittness=0;
 	long ossz=0;
+	//std::ofstream outfile;
+	//outfile.open("adatok200p40g0m0.csv", std::ios_base::app);
 	for (int i = 0; i < _egyedek.size(); i++)
 	{
 		if(fittness < _egyedek[i].fittness){
@@ -90,5 +97,12 @@ void Evolucio::kiir(){
 		ossz+=_egyedek[i].fittness;
 	}
 	std::cout<<"A generacio atlag fitnesse:"<<ossz/_egyedek.size()<<"\n";
+
+
+	
+	//outfile <<fittness<<";"<<ossz/_egyedek.size();
+	//outfile << std::endl;
+	//outfile.close();
+
 
 }

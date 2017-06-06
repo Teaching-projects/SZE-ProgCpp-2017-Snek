@@ -5,7 +5,6 @@ double tavolsag(SDL_Point point1, SDL_Point point2)
 {
 	double distance = sqrt( (point1.x - point2.x) * (point1.x - point2.x) +
                             (point1.y - point2.y) * (point1.y - point2.y));
-	//std::cout<< distance/400<<"\n";
     return distance;
 }
 
